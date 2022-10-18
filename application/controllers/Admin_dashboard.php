@@ -100,6 +100,9 @@ $current=date('Y-m-d');
         $todays_sales_report = $CI->Invoices->todays_sales_report();
         $monthly_sales_report= $CI->Reports->monthly_sales_report();
         $sales_report        = $CI->Reports->todays_total_sales_report();
+        $no_of_sale     = $CI->Reports->total_sales_report();
+        $no_of_expense     = $CI->Reports->total_purchase_report();
+        $total_sales_invoice         = $CI->Reports->total_sale_invoice();
         $total_sales         = $CI->Reports->total_sales_amount($split[0],$split[1]);
         $total_purchase      = $CI->Reports->total_purchase_amount($split[0],$split[1]);
         $total_expenses      =$CI->Reports->total_expense_amount($split[0],$split[1]);
@@ -107,12 +110,13 @@ $current=date('Y-m-d');
         $total_employee_salary       = $CI->Reports->total_employee_salary($split[0],$split[1]);
         $total_service     = $CI->Reports->total_service_amount($split[0],$split[1]);
         $purchase_report     = $CI->Reports->todays_total_purchase_report();
-     
+     $overall_purchase_amt= $CI->Reports->overall_purchase_amt();
         $todays_sale_product = $CI->Reports->todays_sale_product();
         $total_profit        = ($sales_report[0]['total_sale'] - $sales_report[0]['total_supplier_rate']);
         $currency_details    = $CI->Web_settings->retrieve_setting_editdata();
         $best_sales_product  = $CI->Invoices->best_sales_products();
-    
+    $total_sales_product =$CI->Reports->total_sales_product();
+    $total_expense_product =$CI->Reports->total_expense_product();
          $tlvmonth = '';
                     $month = ["January","February","March","April","May","June","July","August","September","October","November","December"];
                     for ($i=0; $i <= 11; $i++) {
@@ -176,10 +180,16 @@ if (!empty($best_sales_product))
   //   print_r($data1);
    
         $data = array(
+            'total_sales_product'  =>$total_sales_product,
+            'total_expense_product' => $total_expense_product,
+            'no_of_expense' => $no_of_expense,
+            'overall_purchase_amt'  => $overall_purchase_amt,
             'total_expenses'      =>$total_expenses,
             'salesamount'         => $salesamount,
             'total_employee_salary'       => $total_employee_salary,
            'total_service'  =>$total_service,
+           'no_of_sale' =>$no_of_sale,
+           'total_sales_invoice'=>$total_sales_invoice,
     'title'               => display('dashboard'),
     'total_customer'      => $total_customer,
     'total_customersetting' => $total_customersetting,

@@ -64,7 +64,7 @@
              <i class="fa fa-users" style="color: #fff;"></i>
             </div>
             <div class="inner">
-              <h4><span class="count-number"><?php if($total_sales==''){echo 0;}else{echo html_escape($total_sales);} ?></span></h4>
+              <h4><span class="count-number"><?php if($no_of_sale==''){echo 0;}else{echo html_escape($no_of_sale);} ?></span></h4>
               <p><?php echo "Sales"?></p>
             </div>
            
@@ -79,7 +79,7 @@
              <i class="fa fa-shopping-bag" style="color: #fff;"></i>
             </div>
             <div class="inner">
-              <h4><span class="count-number"><?php if($total_sales==''){echo 0;}else{echo html_escape($total_sales);}   ?></span></h4>
+              <h4><span class="count-number"><?php if($total_sales_invoice==''){echo 0;}else{echo html_escape($total_sales_invoice);}   ?></span></h4>
 
               <p><?php echo "Sale Invoice"?></p>
             </div>
@@ -95,7 +95,7 @@
              <i class="fa fa-user" style="color: #fff;"></i>
             </div>
             <div class="inner">
-              <h4><span class="count-number"><?php if($total_expenses==''){echo 0;}else{echo html_escape($total_expenses);} ?></span></h4>
+              <h4><span class="count-number"><?php if($no_of_expense==''){echo 0;}else{echo html_escape($no_of_expense);} ?></span></h4>
 
               <p><?php echo "Expenses"?></p>
             </div>
@@ -111,7 +111,7 @@
              <i class="fa fa-money" style="color: #fff;"></i>
             </div>
             <div class="inner">
-              <h4><span class="count-number"><?php if($total_expenses==''){echo 0;}else{echo html_escape($total_expenses);}  ?></span> </h4>
+              <h4><span class="count-number"><?php if($overall_purchase_amt==''){echo 0;}else{echo html_escape($overall_purchase_amt);}  ?></span> </h4>
 
               <p><?php echo "Expenses Invoice"?></p>
             </div>
@@ -131,7 +131,7 @@
  <i class="fa fa-users" style="color: #fff;"></i>
 </div>
 <div class="inner">
-  <h4><span class="count-number"><?php if($total_customer==''){echo 0;}else{echo html_escape($total_customer);}   ?></span></h4>
+  <h4><span class="count-number"><?php if($total_sales_product==''){echo 0;}else{echo html_escape($total_sales_product);}   ?></span></h4>
   <p><?php echo "Product Sold"?></p>
 </div>
 
@@ -146,7 +146,7 @@
  <i class="fa fa-shopping-bag" style="color: #fff;"></i>
 </div>
 <div class="inner">
-  <h4><span class="count-number"><?php if($total_purchase==''){echo 0;}else{echo html_escape($total_purchase);} ?></span></h4>
+  <h4><span class="count-number"><?php if($total_expense_product==''){echo 0;}else{echo html_escape($total_expense_product);} ?></span></h4>
 
   <p><?php echo "Product Purchased"?></p>
 </div>

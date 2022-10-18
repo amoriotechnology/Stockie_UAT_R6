@@ -382,7 +382,59 @@ class reports extends CI_Model {
         }
         return false;
     }
-
+    public function total_sale_invoice(){
+        $this->db->select(" sum(b.total_price) as total_sale,sum(`quantity`*`supplier_rate`) as total_supplier_rate,(SUM(total_price) - SUM(`quantity`*`supplier_rate`)) AS total_profit");
+        $this->db->from('invoice a');
+        $this->db->join('invoice_details b', 'b.invoice_id = a.invoice_id');
+        $this->db->where('a.sales_by',$this->session->userdata('user_id'));
+       
+        $this->db->order_by('a.invoice_id', 'desc');
+        $query = $this->db->get()->row();
+   
+        return $query->total_sale;
+    }
+    public function total_sales_report() {
+     
+        $this->db->select("*");
+        $this->db->from('invoice');
+     
+        $this->db->where('sales_by',$this->session->userdata('user_id'));
+   
+        $query = $this->db->get();
+        //echo $this->db->last_query();
+        if ($query->num_rows() > 0) {
+            return $query->num_rows();
+        }
+        return false;
+    }
+    public function total_sales_product() {
+     
+        $this->db->select("*");
+        $this->db->from('invoice_details');
+     
+        $this->db->where('create_by',$this->session->userdata('user_id'));
+   
+        $query = $this->db->get();
+        //echo $this->db->last_query();
+        if ($query->num_rows() > 0) {
+            return $query->num_rows();
+        }
+        return false;
+    }
+    public function total_expense_product() {
+     
+        $this->db->select("*");
+        $this->db->from('product_purchase_details');
+     
+        $this->db->where('create_by',$this->session->userdata('user_id'));
+   
+        $query = $this->db->get();
+        //echo $this->db->last_query();
+        if ($query->num_rows() > 0) {
+            return $query->num_rows();
+        }
+        return false;
+    }
      public function todays_total_sales_amount() {
         $today = date('Y-m-d');
         $this->db->select("sum(total_amount) as total_amount");
@@ -409,7 +461,20 @@ class reports extends CI_Model {
         }
         return false;
     }
-
+    public function total_purchase_report() {
+       
+        $this->db->select("*");
+        $this->db->from('product_purchase ');
+        $this->db->where('create_by',$this->session->userdata('user_id'));
+       
+        
+        $query = $this->db->get();
+        //echo $this->db->last_query();
+        if ($query->num_rows() > 0) {
+            return $query->num_rows();
+        }
+        return false;
+    }
     // todays sales product
     public function todays_sale_product() {
         $today = date('Y-m-d');
@@ -1144,13 +1209,25 @@ $this->db->select("sum(a.total_amount) as amount,count(a.invoice_id) as toal_inv
         $this->db->where('purchase_date >=',$date1);
         $this->db->where('purchase_date <=', $date2);
         $query = $this->db->get();
+        echo $this->db->last_query();
+     //   return $query->totalpurchase;
       //  if(!empty($query->row()->totalpurchase)){
          //   return $query->row()->totalpurchase;
       //  }else{
          //   return 1;
        // }
     }
-
+    public function overall_purchase_amt() {
+       
+    
+        $this->db->select("sum(grand_total_amount) as totalpurchase");
+        $this->db->from('product_purchase');
+        $this->db->where('create_by',$this->session->userdata('user_id'));
+       
+        $query = $this->db->get()->row();
+        return $query->totalpurchase;
+  
+    }
     public function total_expense_amount($date1,$date2) {
        
 
