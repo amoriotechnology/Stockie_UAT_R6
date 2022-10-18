@@ -1,4 +1,13 @@
 
+
+
+<script src="<?php echo base_url() ?>assets/js/Chart.min.js" ></script>
+<script src="<?php echo base_url() ?>assets/js/canvasjs.min.js" ></script>
+<script src="<?php echo base_url() ?>assets/js/dashboard.js" ></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+<link rel="stylesheet" href="<?php echo base_url() ?>my-assets/css/style.css">
+
 <!-- Admin Home Start -->
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -19,17 +28,10 @@
     </section>
     <!-- Main content -->
     <section class="content">
+
         <!-- Alert Message -->
-        <?php 
-if(isset($_POST['btnSearch']))
-{
-   $postdate = $_POST['alldata'];
-}
-$searchdate =(!empty($postdate)?$postdate:date('F Y'));
 
-//print_r($page_setting);
 
-?>
         <?php
         $message = $this->session->userdata('message');
         if (isset($message)) {
@@ -62,12 +64,12 @@ $searchdate =(!empty($postdate)?$postdate:date('F Y'));
              <i class="fa fa-users" style="color: #fff;"></i>
             </div>
             <div class="inner">
-              <h4><span class="count-number"><?php echo html_escape($total_customer) ?></span></h4>
-              <p><?php echo display('total_customer')?></p>
+              <h4><span class="count-number"><?php if($total_sales==''){echo 0;}else{echo html_escape($total_sales);} ?></span></h4>
+              <p><?php echo "Sales"?></p>
             </div>
            
             </div>
-            <a href="<?php echo base_url('Ccustomer/manage_customer') ?>" class="small-box-footer" style="background: #18628f;"><?php echo display('total_customer')?></a>
+            <a href="<?php echo base_url('Ccustomer/manage_customer') ?>" class="small-box-footer" style="background: #18628f;"><?php echo "Total Sale"?></a>
           </div>
             </div>
             <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3" style="<?php if($total_productsetting=='disable'){ echo "display: none;"; }else{ echo "display: block;"; } ?>">
@@ -77,13 +79,13 @@ $searchdate =(!empty($postdate)?$postdate:date('F Y'));
              <i class="fa fa-shopping-bag" style="color: #fff;"></i>
             </div>
             <div class="inner">
-              <h4><span class="count-number"><?php echo html_escape($total_product) ?></span></h4>
+              <h4><span class="count-number"><?php if($total_sales==''){echo 0;}else{echo html_escape($total_sales);}   ?></span></h4>
 
-              <p><?php echo display('total_product')?></p>
+              <p><?php echo "Sale Invoice"?></p>
             </div>
             
         </div>
-            <a href="<?php echo base_url('Cproduct/manage_product') ?>" class="small-box-footer" style="background: #d3465b;"><?php echo display('total_product')?></a>
+            <a href="<?php echo base_url('Cproduct/manage_product') ?>" class="small-box-footer" style="background: #d3465b;"><?php echo "Sale Invoice"?></a>
           </div>
             </div>
             <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3" style="<?php if($total_suppliersetting=='disable'){ echo "display: none;"; }else{ echo "display: block;"; } ?>">
@@ -93,13 +95,13 @@ $searchdate =(!empty($postdate)?$postdate:date('F Y'));
              <i class="fa fa-user" style="color: #fff;"></i>
             </div>
             <div class="inner">
-              <h4><span class="count-number"><?php echo html_escape($total_suppliers)?></span></h4>
+              <h4><span class="count-number"><?php if($total_expenses==''){echo 0;}else{echo html_escape($total_expenses);} ?></span></h4>
 
-              <p><?php echo display('total_supplier')?></p>
+              <p><?php echo "Expenses"?></p>
             </div>
           
         </div>
-            <a href="<?php echo base_url('Csupplier/manage_supplier') ?>" class="small-box-footer" style="background: #2aa354;"><?php echo display('total_supplier')?> </a>
+            <a href="<?php echo base_url('Csupplier/manage_supplier') ?>" class="small-box-footer" style="background: #2aa354;"><?php echo "Expenses"?> </a>
           </div>
             </div>
             <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3" style="<?php if($total_salessetting=='disable'){ echo "display: none;"; }else{ echo "display: block;"; } ?>">
@@ -109,22 +111,82 @@ $searchdate =(!empty($postdate)?$postdate:date('F Y'));
              <i class="fa fa-money" style="color: #fff;"></i>
             </div>
             <div class="inner">
-              <h4><span class="count-number"><?php echo html_escape($total_sales) ?></span> </h4>
+              <h4><span class="count-number"><?php if($total_expenses==''){echo 0;}else{echo html_escape($total_expenses);}  ?></span> </h4>
 
-              <p><?php echo display('total_invoice')?></p>
+              <p><?php echo "Expenses Invoice"?></p>
             </div>
         </div>
           
-            <a href="<?php echo base_url('Cinvoice/manage_invoice') ?>" class="small-box-footer" style="background: #ef922b;"><?php echo display('total_invoice')?> </a>
+            <a href="<?php echo base_url('Cinvoice/manage_invoice') ?>" class="small-box-footer" style="background: #ef922b;"><?php echo "Expenses Invoice"?> </a>
           </div>
             </div>
         </div>
         <hr>
+        <div class="row">
+
+<div class="col-xs-12 col-sm-6 col-md-6 col-lg-3" style="<?php if($total_customersetting=='disable'){ echo "display: none;"; }else{ echo "display: block;"; } ?>" >
+     <div class="small-box whitecolor">
+        <div class="box-para">
+             <div class="icon" style="background-color: #18628f;">
+ <i class="fa fa-users" style="color: #fff;"></i>
+</div>
+<div class="inner">
+  <h4><span class="count-number"><?php if($total_customer==''){echo 0;}else{echo html_escape($total_customer);}   ?></span></h4>
+  <p><?php echo "Product Sold"?></p>
+</div>
+
+</div>
+<a href="<?php echo base_url('Ccustomer/manage_customer') ?>" class="small-box-footer" style="background: #18628f;"><?php echo "Product Sold"?></a>
+</div>
+</div>
+<div class="col-xs-12 col-sm-6 col-md-6 col-lg-3" style="<?php if($total_productsetting=='disable'){ echo "display: none;"; }else{ echo "display: block;"; } ?>">
+    <div class="small-box whitecolor">
+        <div class="box-para">
+            <div class="icon" style="background-color: #d3465b;">
+ <i class="fa fa-shopping-bag" style="color: #fff;"></i>
+</div>
+<div class="inner">
+  <h4><span class="count-number"><?php if($total_purchase==''){echo 0;}else{echo html_escape($total_purchase);} ?></span></h4>
+
+  <p><?php echo "Product Purchased"?></p>
+</div>
+
+</div>
+<a href="<?php echo base_url('Cproduct/manage_product') ?>" class="small-box-footer" style="background: #d3465b;"><?php echo "Product Purchased"?></a>
+</div>
+</div>
+
         <?php if ($this->session->userdata('user_type') == '1') { ?>
-          
             <div class="row">
                 <!-- This month progress -->
-                <div class="col-sm-12 col-md-7" style="<?php if($best_sales_productsetting=='disable'){ echo "display: none;"; }else{ echo "display: block;"; } ?>">
+               
+                 <div class="col-sm-12 col-md-6" style="<?php if($expense_statementsetting=='disable'){ echo "display: none;"; }else{ echo "display: block;"; } ?>">
+                    <div class="panel panel-bd">
+                        <div class="panel-heading">
+                            <div class="panel-title">
+                                 
+                            <?php echo form_open_multipart('Admin_dashboard/index',array('class' => 'form-vertical', 'id' => 'insert_sale','name' => 'insert_sale'))?>
+                                  <div class="form-group row">
+                                    <div class="col-sm-9 marginpadding-right0">
+                                 
+                                    <input class="daterangepicker-field" name="daterangepicker-field" id="daterangepicker-field"></input>
+                                
+                                 
+                                  <input type="submit" name="btnSearch" id="submit" />
+                               
+                                </div>
+                                <?php echo form_close();?>
+                            </div>
+                            <div class="panel-body">
+                             <div id="chartContainer" name="chartContainer"  class="piechartcontainer"></div>
+                            </div>
+                        </div>
+                        </div>
+                        </div>
+                        </div>
+        <div class="row">
+                <!-- This month progress -->
+                <div class="col-sm-12 col-md-6" style="<?php if($best_sales_productsetting=='disable'){ echo "display: none;"; }else{ echo "display: block;"; } ?>">
                     <div class="panel panel-bd">
                         <div class="panel-heading">
                             <div class="panel-title" style="display: flex;
@@ -140,25 +202,7 @@ $searchdate =(!empty($postdate)?$postdate:date('F Y'));
                     </div>
                 </div>
                  <div class="col-sm-12 col-md-5" style="<?php if($expense_statementsetting=='disable'){ echo "display: none;"; }else{ echo "display: block;"; } ?>">
-                    <div class="panel panel-bd">
-                        <div class="panel-heading">
-                            <div class="panel-title">
-                                 
-                               <?php echo form_open_multipart('','name="form1" id="form1"')?>   
-                                  <div class="form-group row">
-                                    <div class="col-sm-9 marginpadding-right0">
-                                  <input type="text" class="form-control " placehholder="type..." value="<?php echo $searchdate;?>" name="alldata" id="alldata" ></div>
-                                  <div class="col-sm-3 marginpaddingleft0">
-                                  <button type="submit" name="btnSearch" class="btn filterbutton"><i class="fa fa-search"></i> <?php echo display('filter')?></button>
-                                </div>
-                                </div>
-                                <?php echo form_close();?>
-                            </div>
-                            <div class="panel-body">
-                             <div id="chartContainer" class="piechartcontainer"></div>
-                            </div>
-                        </div>
-                        </div>
+                  
                         </div>
 
                     <div class="col-md-8" style="<?php if($yearly_reportsetting=='disable'){ echo "display: none;"; }else{ echo "display: block;"; } ?>">
@@ -326,27 +370,47 @@ $searchdate =(!empty($postdate)?$postdate:date('F Y'));
                
              
             </div>
-        
-   <input type="hidden" id="currency" value="<?php echo  html_escape($currency)?>" name="">
-        <input type="hidden" id="totalsalep" value="<?php echo html_escape($this->Reports->total_sales_amount($searchdate))?>" name="">
-      <input type="hidden" id="totalplurchasep" value="<?php
-     echo html_escape($this->Reports->total_purchase_amount($searchdate))?>" name="">
-      <input type="hidden" id="totalexpensep" value="<?php
-     echo html_escape($this->Reports->total_expense_amount($searchdate))?>" name="">
-     <input type="hidden" id="totalemployeesalaryp" value="<?php
-     echo html_escape($this->Reports->total_employee_salary($searchdate))?>" name="">
+            <?php
+if(isset($_POST['btnSearch'])){
+    $dat = $_REQUEST["daterangepicker-field"];
+    if($dat==''){
+        $prev_month = date('Y-m-d', strtotime("-1 months", strtotime("NOW"))); 
+$current=date('Y-m-d');
+$dat= $prev_month."to". $current;
+
+    }
+    
+    $dat = str_replace(' ', '', $dat);
+    $split=explode("to",$dat);
+?>
+  <input type="hidden" id="currency" value="<?php echo  html_escape($currency)?>" name="">
+        <input type="text" id="totalsalep" value="<?php echo html_escape($this->Reports->total_sales_amount($split[0],$split[1]))?>" name="">
+      <input type="text" id="totalplurchasep" value="<?php
+     echo html_escape($this->Reports->total_purchase_amount($split[0],$split[1]))?>" name="">
+      <input type="text" id="totalexpensep" value="<?php
+     echo html_escape($this->Reports->total_expense_amount($split[0],$split[1]))?>" name="">
+     <input type="text" id="totalemployeesalaryp" value="<?php
+     echo html_escape($this->Reports->total_employee_salary($split[0],$split[1]))?>" name="">
 
       <input type="hidden" id="totalservicep" value="<?php
-     echo html_escape($this->Reports->total_service_amount($searchdate))?>" name="">
+     echo html_escape($this->Reports->total_service_amount($split[0],$split[1]))?>" name="">
 
-      <input type="hidden" id="month" value="<?php echo html_escape($month);?>" name="">
-      <input type="hidden" id="tlvmonthsale" value="<?php echo html_escape($tlvmonthsale);?>" name="">
-      <input type="hidden" id="tlvmonthpurchase" value="<?php echo html_escape($tlvmonthpurchase);?>" name=""> 
+      <input type="text" id="month" value="<?php echo html_escape($month);?>" name="">
+      <input type="text" id="tlvmonthsale" value="<?php echo html_escape($tlvmonthsale);?>" name="">
+      <input type="text" id="tlvmonthpurchase" value="<?php echo html_escape($tlvmonthpurchase);?>" name=""> 
       <input type="hidden" id="salspurhcaselabel"  value="<?php echo display("sales_and_purchase_report_summary");?>- <?php echo  date("Y")?>" name="">     
 
 
 <input type="hidden" id="bestsalelabel" value='<?php echo html_escape($chart_label);?>' name=""> 
 <input type="hidden" id="bestsaledata" value='<?php echo html_escape($chart_data);?>' name=""> 
+
+<?php
+}
+
+?>
+    
+          
+
 
 <!--<input type="hidden" value='<?php// @$seperatedData = explode(',', $chart_data); echo html_escape(($seperatedData[0] + 10));?>' name="" id="bestsalemax">  -->   
     </section> <!-- /.content -->
@@ -355,10 +419,24 @@ $searchdate =(!empty($postdate)?$postdate:date('F Y'));
 
 <!-- ChartJs JavaScript -->
 
-<script src="<?php echo base_url() ?>assets/js/Chart.min.js" type="text/javascript"></script>
-<script src="<?php echo base_url() ?>assets/js/canvasjs.min.js" type="text/javascript"></script>
-<script src="<?php echo base_url() ?>assets/js/dashboard.js" type="text/javascript"></script>
+<!-- partial -->
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.0/knockout-debug.js'></script>
+
+<script  src="<?php echo base_url() ?>my-assets/js/script.js"></script>
+<script>
 
 
+    //create data object here so we can dynamically set new csrfName/Hash
+    $('#submit').on('click', function (e) {
+      var date=$('#daterangepicker-field').val();
+      sessionStorage.setItem("daterange", date);
+ 
+});
+$(function() { 
+var retrieve =sessionStorage.getItem("daterange");
+$('#daterangepicker-field').val(retrieve);
+});
 
-
+</script>

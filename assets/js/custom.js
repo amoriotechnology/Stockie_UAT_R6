@@ -1303,7 +1303,7 @@ $(document).ready(function(){
 /*dashboarjs*/
    
 
-   $(".datepicker").datepicker({dateFormat: 'yy-mm-dd'});
+
 
             // select 2 dropdown 
             $("select.form-control:not(.dont-select-me)").select2({

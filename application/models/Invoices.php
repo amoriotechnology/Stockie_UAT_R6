@@ -40,6 +40,16 @@ class Invoices extends CI_Model {
         return $query->num_rows();
 
     } 
+    /*
+    public function count_invoice_data($date) {
+
+        //return $this->db->count_all("invoice");
+        $this->db->where('sales_by',$this->session->userdata('user_id'));
+        $this->db->where('sales_by',$this->session->userdata('user_id'));
+        $query=$this->db->get('invoice');
+        return $query->num_rows();
+
+    } */
        public function commercial_inv_number()
     {
       return  $data = $this->db->select("commercial_invoice_number as voucher")

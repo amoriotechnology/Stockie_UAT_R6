@@ -62,7 +62,20 @@ class Admin_dashboard extends CI_Controller {
        $this->template->full_admin_html_view($content);
     }
     public function index() {
+        
+        $date = $this->input->post('daterangepicker-field',TRUE);
+        if($date==''){
+            $prev_month = date('Y-m-d', strtotime("-1 months", strtotime("NOW"))); 
+$current=date('Y-m-d');
+ $date= $prev_month."to". $current;
 
+        }
+        
+        $date = str_replace(' ', '', $date);
+        $split=explode("to",$date);
+       // echo $date;
+      //  print_r($split);
+      //  die();
         //echo $this->session->userdata('user_id');
         $CI = & get_instance();
         $CI->load->library('lreport');
@@ -83,17 +96,23 @@ class Admin_dashboard extends CI_Controller {
         $total_customer      = $CI->Customers->count_customer();
         $total_product       = $CI->Products->count_product();
         $total_suppliers     = $CI->Suppliers->count_supplier();
-        $total_sales         = $CI->Invoices->count_invoice();
-        $total_purchase      = $CI->Purchases->count_purchase();
+       
         $todays_sales_report = $CI->Invoices->todays_sales_report();
         $monthly_sales_report= $CI->Reports->monthly_sales_report();
         $sales_report        = $CI->Reports->todays_total_sales_report();
-        $salesamount         = $CI->Reports->todays_total_sales_amount();
+        $total_sales         = $CI->Reports->total_sales_amount($split[0],$split[1]);
+        $total_purchase      = $CI->Reports->total_purchase_amount($split[0],$split[1]);
+        $total_expenses      =$CI->Reports->total_expense_amount($split[0],$split[1]);
+        $salesamount         = $CI->Reports->todays_total_sales_amount($split[0],$split[1]);
+        $total_employee_salary       = $CI->Reports->total_employee_salary($split[0],$split[1]);
+        $total_service     = $CI->Reports->total_service_amount($split[0],$split[1]);
         $purchase_report     = $CI->Reports->todays_total_purchase_report();
+     
         $todays_sale_product = $CI->Reports->todays_sale_product();
         $total_profit        = ($sales_report[0]['total_sale'] - $sales_report[0]['total_supplier_rate']);
         $currency_details    = $CI->Web_settings->retrieve_setting_editdata();
         $best_sales_product  = $CI->Invoices->best_sales_products();
+    
          $tlvmonth = '';
                     $month = ["January","February","March","April","May","June","July","August","September","October","November","December"];
                     for ($i=0; $i <= 11; $i++) {
@@ -144,7 +163,23 @@ if (!empty($best_sales_product))
              $yearly_reportsetting=isset($p[7]->slug)?$p[7]->status:'enable';
              $todays_sales_reportsetting=isset($p[8]->slug)?$p[8]->status:'enable';
          }
+         //$data1 is for sample can be delete
+     $data1 = array(
+        'total_sales'         => $total_sales,
+        'total_purchase'     => $total_purchase,
+        'total_expenses'      =>$total_expenses,
+        'salesamount'         => $salesamount,
+        'total_employee_salary'       => $total_employee_salary,
+       'total_service'  =>$total_service
+
+     );
+  //   print_r($data1);
+   
         $data = array(
+            'total_expenses'      =>$total_expenses,
+            'salesamount'         => $salesamount,
+            'total_employee_salary'       => $total_employee_salary,
+           'total_service'  =>$total_service,
     'title'               => display('dashboard'),
     'total_customer'      => $total_customer,
     'total_customersetting' => $total_customersetting,

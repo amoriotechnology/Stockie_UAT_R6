@@ -50,7 +50,8 @@
 
                                  <?php echo form_open('Cexpense/expense_statement', array('class' => 'form-inline', 'method' => 'get')) ?>
                         <?php
-                        $today = date('Y-m-d');
+                         $startval = date('Jan Y');
+                         $endval = date('M Y');
                         ?>
                         <div class="form-group">
                              <label for="expense"><?php echo display('expense_item_name') ?><i class="text-danger">*</i></label>
@@ -67,12 +68,12 @@
                         </div>
                         <div class="form-group">
                             <label class="" for="from_date"><?php echo display('start_date') ?></label>
-                            <input type="text" name="from_date" class="form-control datepicker" id="from_date" placeholder="<?php echo display('start_date') ?>" value="<?php echo (!empty($from_date)?html_escape($from_date):html_escape($today)) ?>">
+                            <input type="text" name="from_date" class="form-control datepicker" id="from_date" placeholder="<?php echo display('start_date') ?>" value="<?php echo $startval; ?>">
                         </div> 
 
                         <div class="form-group">
                             <label class="" for="to_date"><?php echo display('end_date') ?></label>
-                            <input type="text" name="to_date" class="form-control datepicker" id="to_date" placeholder="<?php echo display('end_date') ?>" value="<?php echo (!empty($to_date)?html_escape($to_date):html_escape($today)) ?>">
+                            <input type="text" name="to_date" class="form-control datepicker" id="to_date" placeholder="<?php echo display('end_date') ?>" value="<?php echo $endval; ?>">
                         </div>  
 
                         <button type="submit" class="btn btn-success"><?php echo display('search') ?></button>

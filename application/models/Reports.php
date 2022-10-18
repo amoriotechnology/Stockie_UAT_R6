@@ -1122,87 +1122,38 @@ $this->db->select("sum(a.total_amount) as amount,count(a.invoice_id) as toal_inv
 
     /// Total Report part
 
-        public function total_sales_amount($date=null) {
-        $date = (!empty($date)?$date:date('F Y'));
-        $days = $this->yearmonthval($date);
+        public function total_sales_amount($date1,$date2) {
+       
         $this->db->select("sum(total_amount) as totalsales");
         $this->db->from('invoice');
         $this->db->where('sales_by',$this->session->userdata('user_id'));
-        $this->db->where('date >=',$days['start_date']);
-        $this->db->where('date <=',$days['end_date']);
+        $this->db->where('date >=',$date1);
+        $this->db->where('date <=',$date2);
         $query = $this->db->get()->row();
+   
         return $query->totalsales;
     }
-    public function yearmonthval($date){
-         list($month,$year) = explode(' ',$date);
-         switch ($month)
-        {
-            case "January":
-                $month = '01';
-                break;
-            case "February":
-                $month = '02';
-                break;
-            case "March":
-                $month = '03';
-                break;
-            case "April":
-                $month = '04';
-                break;
-            case "May":
-                $month = '05';
-                break;
-            case "June":
-                $month = '06';
-                break;
-            case "July":
-                $month = '07';
-                break;
-            case "August":
-                $month = '08';
-                break;
-            case "September":
-                $month = '9';
-                break;
-            case "October":
-                $month = '10';
-                break;
-            case "November":
-                $month = '11';
-                break;
-            case "December":
-                $month = '12';
-                break;
-        }
-        $fdate = $year.'-'.$month.'-'.'01';
-        $lastday = date('t',strtotime($fdate));
-        $edate = $year.'-'.$month.'-'.$lastday;
-        $startd    = $fdate;
-        $data['start_date']=$startd;
-        $data['end_date'] =$edate;
-        return $data;
-    }
+  
 
-
-     public function total_purchase_amount($date=null) {
-        $date = (!empty($date)?$date:date('F Y'));
-        $days = $this->yearmonthval($date);
+     public function total_purchase_amount($date1,$date2) {
+       
+    
         $this->db->select("sum(grand_total_amount) as totalpurchase");
         $this->db->from('product_purchase');
         $this->db->where('create_by',$this->session->userdata('user_id'));
-        $this->db->where('purchase_date >=',$days['start_date']);
-        $this->db->where('purchase_date <=',$days['end_date']);
+        $this->db->where('purchase_date >=',$date1);
+        $this->db->where('purchase_date <=', $date2);
         $query = $this->db->get();
-        if(!empty($query->row()->totalpurchase)){
-            return $query->row()->totalpurchase;
-        }else{
-            return 1;
-        }
+      //  if(!empty($query->row()->totalpurchase)){
+         //   return $query->row()->totalpurchase;
+      //  }else{
+         //   return 1;
+       // }
     }
 
-    public function total_expense_amount($date=null) {
-        $date = (!empty($date)?$date:date('F Y'));
-        $days = $this->yearmonthval($date);
+    public function total_expense_amount($date1,$date2) {
+       
+
         $this->db->select("*");
         $this->db->where('PHeadName','Expence');
         $this->db->from('acc_coa');
@@ -1210,7 +1161,7 @@ $this->db->select("sum(a.total_amount) as amount,count(a.invoice_id) as toal_inv
         $result =  $query->result_array();
         $totalamount = 0;
         foreach ($result as $expense) {
-           $amount = $this->db->select('ifnull(sum(Debit),0) as amount')->from('acc_transaction')->where('VDate >=',$days['start_date'])->where('VDate <=',$days['end_date'])->where('COAID',$expense['HeadCode'])->get()->row();
+           $amount = $this->db->select('ifnull(sum(Debit),0) as amount')->from('acc_transaction')->where('VDate >=',$date1)->where('VDate <=',$date2)->where('COAID',$expense['HeadCode'])->get()->row();
            $totalamount = $totalamount+$amount->amount;
         }
 
@@ -1218,14 +1169,13 @@ $this->db->select("sum(a.total_amount) as amount,count(a.invoice_id) as toal_inv
     }
 
 // Total Employee Salary
-     public function total_employee_salary($date=null) {
-        $date = (!empty($date)?$date:date('F Y'));
-        $days = $this->yearmonthval($date);
+     public function total_employee_salary($date1,$date2) {
+      
         $this->db->select("sum(total_salary) as totalsalary");
         $this->db->from('employee_salary_payment');
         $this->db->where('paid_by',$this->session->userdata('user_id'));
-        $this->db->where('payment_date >=',$days['start_date']);
-        $this->db->where('payment_date <=',$days['end_date']);
+        $this->db->where('payment_date >=',$date1);
+      $this->db->where('payment_date <=',$date2);
         $query = $this->db->get();
         if(!empty($query->row()->totalsalary)){
             return $query->row()->totalsalary;
@@ -1235,20 +1185,19 @@ $this->db->select("sum(a.total_amount) as amount,count(a.invoice_id) as toal_inv
     }
 
     // Total Employee Salary
-     public function total_service_amount($date=null) {
-        $date = (!empty($date)?$date:date('F Y'));
-        $days = $this->yearmonthval($date);
+     public function total_service_amount($date1,$date2) {
+     
         $this->db->select("sum(total_amount) as totalservice");
         $this->db->from('service_invoice');
         $this->db->where('create_by',$this->session->userdata('user_id'));
-        $this->db->where('date >=',$days['start_date']);
-        $this->db->where('date <=',$days['end_date']);
+        $this->db->where('date >=',$date1);
+        $this->db->where('date <=',$date2);
         $query = $this->db->get();
-        if(!empty($query->row()->totalservice)){
-            return $query->row()->totalservice;
-        }else{
-            return 0.00;
-        }
+      //  if(!empty($query->row()->totalservice)){
+         //   return $query->row()->totalservice;
+      //  }else{
+        //    return 0.00;
+       // }
     }
 
 
