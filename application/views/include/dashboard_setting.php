@@ -69,11 +69,13 @@
                                         <?php
                                          $ttl_amount = $ttl_paid = $ttl_due = $ttl_discout = $ttl_receipt = 0;
                                         $todays = date('Y-m-d');
+                                       
                                         if ($page_setting) {
                                             $sl = 0;
                      foreach ($page_setting as $single) {
+                   //  print_r($single);
+                   
                      
-                                //print_r($single);
                                                 $sl++;
                                                 ?>
                                                 <tr>

@@ -1103,10 +1103,12 @@ public function availability($product_nam,$product_model){
         $this->db->where('a.sales_by',$this->session->userdata('user_id'));
 
         $this->db->order_by('a.invoice', 'desc');
-
-        $query = $this->db->get()->result();
-
-        return $query;
+echo $this->db->last_query();
+        $query = $this->db->get();
+        if ($query->num_rows() > 0) {
+            return $query->result_array();
+        } 
+       
 
     }
 

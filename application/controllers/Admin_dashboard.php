@@ -11,7 +11,7 @@ class Admin_dashboard extends CI_Controller {
         $this->template->current_menu = 'home';
         $this->load->model('Web_settings');
         $this->load->model('Reports');
-       
+        $this->load->database();
     }
     public function dashboardsetting()
     {
@@ -24,27 +24,32 @@ class Admin_dashboard extends CI_Controller {
             $this->output->set_header("Location: " . base_url() . 'Admin_dashboard/login', TRUE, 302);
         }
         $pageen=array();
-        $data['page_setting']=$page_setting=array(array("slug"=>"total_customer","status"=>"enable"),array("slug"=>"total_product","status"=>"enable"),array("slug"=>"total_supplier","status"=>"enable"),array("slug"=>"total_sales","status"=>"enable"),array("slug"=>"expense_statement","status"=>"enable"),array("slug"=>"best_sales_product","status"=>"enable"),array("slug"=>"todays_overview","status"=>"enable"),array("slug"=>"yearly_report","status"=>"enable"),array("slug"=>"todays_sales_report","status"=>"enable")); 
+        $data['page_setting']=$page_setting=array(array("slug"=>"Sale","status"=>"enable"),array("slug"=>"Expense","status"=>"enable"),array("slug"=>"Sale_invoice","status"=>"enable"),array("slug"=>"Expense_invoice","status"=>"enable"),array("slug"=>"Product_sold","status"=>"enable"),array("slug"=>"Product_purchased","status"=>"enable"),array("slug"=>"best_sales_product","status"=>"enable"),array("slug"=>"todays_overview","status"=>"enable"),array("slug"=>"yearly_report","status"=>"enable"),array("slug"=>"todays_sales_report","status"=>"enable")); 
+   
+
         if($this->input->post('page_status')){
         $pagedata=$this->input->post('page_status');
-       // print_r($pagedata);
+  //   echo $pagedata;
+  // echo "sadasd";
         foreach ($page_setting as  $single) {
+         
+              //die();
             if(isset($pagedata[$single['slug']])){
                 $pageen[]=array("slug"=>$single['slug'],"status"=>"enable");
             }else{
                $pageen[]=array("slug"=>$single['slug'],"status"=>"disable"); 
             }
         }
-        //echo json_encode($pageen); die();
+ 
         
         $arr['section_setting']=json_encode($pageen);
-            //die();
+           
               $CI->Web_settings->update_user_setting($this->session->userdata('user_id'),$arr);
               $this->session->set_userdata(array('message'=>'Settings successfully updated'));
         }
        
         $page_details    = $CI->Web_settings->get_user_setting($this->session->userdata('user_id'));
-        // print_r($page_details->section_setting);
+     
          if(isset($page_details['section_setting']) && $page_details['section_setting']!='')
          {
             $pagen=array();
@@ -55,7 +60,7 @@ class Admin_dashboard extends CI_Controller {
             
         }
             $data['page_setting']=$pagen;
-           // print_r($pagen);
+       
          }
         $content = $CI->parser->parse('include/dashboard_setting', $data, true);
         //print_r($data);// die();
@@ -152,20 +157,22 @@ if (!empty($best_sales_product))
     }
 
     $page_details    = $CI->Web_settings->get_user_setting($this->session->userdata('user_id'));
-    $total_customersetting=$total_productsetting=$total_suppliersetting=$total_salessetting=$expense_statementsetting=$best_sales_productsetting=$todays_overviewsetting=$yearly_reportsetting=$todays_sales_reportsetting='enable';
+   
+    $Sale=$Expense=$Sale_invoice=$Expense_invoice=$Product_sold=$Product_purchased=$best_sales_product=$todays_overview=$yearly_report=$todays_sales_report='enable';
     if(isset($page_details['section_setting']) && $page_details['section_setting']!='')
          {
              $data['page_setting']=$p=json_decode($page_details['section_setting']);
-            // print_r($p);
-             $total_customersetting=isset($p[0]->slug)?$p[0]->status:'enable';
-             $total_productsetting=isset($p[1]->slug)?$p[1]->status:'enable';
-             $total_suppliersetting=isset($p[2]->slug)?$p[2]->status:'enable';
-             $total_salessetting=isset($p[3]->slug)?$p[3]->status:'enable';
-             $expense_statementsetting=isset($p[4]->slug)?$p[4]->status:'enable';
-             $best_sales_productsetting=isset($p[5]->slug)?$p[5]->status:'enable';
-             $todays_overviewsetting=isset($p[6]->slug)?$p[6]->status:'enable';
-             $yearly_reportsetting=isset($p[7]->slug)?$p[7]->status:'enable';
-             $todays_sales_reportsetting=isset($p[8]->slug)?$p[8]->status:'enable';
+             $Sale=isset($p[0]->slug)?$p[0]->status:'enable';
+             $Expense=isset($p[1]->slug)?$p[1]->status:'enable';
+             $Sale_invoice=isset($p[2]->slug)?$p[2]->status:'enable';
+             $Expense_invoice=isset($p[3]->slug)?$p[3]->status:'enable';
+             $Product_sold=isset($p[4]->slug)?$p[4]->status:'enable';
+             $Product_purchased=isset($p[5]->slug)?$p[5]->status:'enable';
+             $best_sales_product=isset($p[6]->slug)?$p[6]->status:'enable';
+             $todays_overview=isset($p[7]->slug)?$p[7]->status:'enable';
+             $yearly_report=isset($p[8]->slug)?$p[8]->status:'enable';
+             $todays_sales_report_set=isset($p[9]->slug)?$p[9]->status:'enable';
+            
          }
          //$data1 is for sample can be delete
      $data1 = array(
@@ -192,24 +199,31 @@ if (!empty($best_sales_product))
            'total_sales_invoice'=>$total_sales_invoice,
     'title'               => display('dashboard'),
     'total_customer'      => $total_customer,
-    'total_customersetting' => $total_customersetting,
+    //'total_customersetting' => $total_customersetting,
     'total_product'       => $total_product,
-    'total_productsetting'=> $total_productsetting,
+   // 'total_productsetting'=> $total_productsetting,
     'total_suppliers'     => $total_suppliers,
-    'total_suppliersetting'=> $total_suppliersetting,
+  //  'total_suppliersetting'=> $total_suppliersetting,
     'tlvmonthsale'        => $currentyearsale,
     'tlvmonthpurchase'    => $currentyearpurchase,
     'month'               => $tlvmonth,
     'total_sales'         => $total_sales,
-    'total_salessetting'  => $total_salessetting,
-    'expense_statementsetting' => $expense_statementsetting,
-    'best_sales_productsetting'=> $best_sales_productsetting,
-    'todays_overviewsetting'  => $todays_overviewsetting,
-    'yearly_reportsetting'  => $yearly_reportsetting,
-    'todays_sales_reportsetting'=> $todays_sales_reportsetting,
+ 
+
+
+    'sale_setting'  => $Sale,
+    'expense_setting'  => $Expense,
+    'sale_invoice_setting'  => $Sale_invoice,
+    'expense_invoice_setting'  => $Expense_invoice,
+    'product_sold'  => $Product_sold,
+    'product_purchased'  => $Product_purchased,
+    'best_sales_product'  => $best_sales_product,
+    'todays_overviewsetting'  => $todays_overview,
+    'yearly_reportsetting'  => $yearly_report,
+    'todays_sales_reportsetting'=> $todays_sales_report_set,
     'total_purchase'      => $total_purchase,
     'todays_sales_report' => $todays_sales_report,
-    'chart_label'         => $chart_label,
+    //'chart_label'         => $chart_label,
     'chart_data'          => $chart_data,
     'purchase_amount'     => number_format($sales_report[0]['total_supplier_rate'], 2, '.', ','),
     'sales_amount'        => number_format($salesamount[0]['total_amount'], 2, '.', ','),
@@ -226,7 +240,18 @@ if (!empty($best_sales_product))
         //print_r($data); die();
         $this->template->full_admin_html_view($content);
     }
+    public function chart() {
+        $start=$_GET['start'];
+        $end=$_GET['end'];
+        
+           
+        $CI = & get_instance();
+        $CI->load->model('Reports');
+        //$info = $CI->Reports->chart($start,$end);
+        $info = $CI->Reports->chart_exp($start,$end);
+        print_r($info);
 
+  }
 //    ============ its for see_all_best_sales =============
     public function see_all_best_sales() {
         $CI = & get_instance();

@@ -10,7 +10,7 @@
 var chart = new CanvasJS.Chart("chartContainer", {
     animationEnabled: true,
     title: {
-        text: "Expense statement",
+       // text: "Expense statement",
          fontColor: "green"
     },
    

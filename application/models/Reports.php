@@ -401,7 +401,7 @@ class reports extends CI_Model {
         $this->db->where('sales_by',$this->session->userdata('user_id'));
    
         $query = $this->db->get();
-        //echo $this->db->last_query();
+      
         if ($query->num_rows() > 0) {
             return $query->num_rows();
         }
@@ -415,12 +415,76 @@ class reports extends CI_Model {
         $this->db->where('create_by',$this->session->userdata('user_id'));
    
         $query = $this->db->get();
-        //echo $this->db->last_query();
+      
         if ($query->num_rows() > 0) {
             return $query->num_rows();
         }
         return false;
     }
+    public function chart($start,$end) {
+     
+     $val=      $this->db->select("*")
+         ->from('invoice')
+         ->where('sales_by',$this->session->userdata('user_id'))
+       ->where('date >=', $start)
+        ->where('date <=', $end);
+        $query =  $val->get()->result();
+       
+        $category = array();
+        $category['name'] = 'sale';
+$series1 = array();
+$series1['name'] = 'expense';
+ foreach ($query as $row)
+       {
+        
+       $category['date'][] = $row->date;
+       $category['amount'][] = $row->total_amount;
+    }
+       $result = array();
+array_push($result,$category);
+
+$qury=$this->db->select("*")
+->from('purchase_order')
+->where('create_by',$this->session->userdata('user_id'))
+->where('purchase_date >=', $start)
+->where('purchase_date <=', $end);
+$query1 = $qury->get()->result();
+$data1 = array();
+ foreach ($query1 as $row1)
+ {
+ $series1['date'][] = $row1->purchase_date;
+ $series1['amount'][] = $row1->grand_total_amount;
+}
+
+array_push($result,$series1);
+        echo json_encode($result);die();
+  
+    }
+ public function chart_exp($start,$end) {
+     
+                $this->db->select("*")
+         ->from('invoice')
+         ->where('sales_by',$this->session->userdata('user_id'))
+       ->where('date >=', $start)
+        ->where('date <=', $end);
+        $query = $this->db->get();
+        $results=$query->result_array();
+        $data = array();
+        foreach ($results as $key => $value) {
+            $data[$key]['label'] = $value['date'];
+            $data[$key]['value'] = $value['total_amount'];
+        }
+    
+        echo json_encode($data);
+      //  $results=$query->result_array();
+      //  return $query->result();
+      
+      
+    
+       
+     
+
+ }
     public function total_expense_product() {
      
         $this->db->select("*");
@@ -429,7 +493,7 @@ class reports extends CI_Model {
         $this->db->where('create_by',$this->session->userdata('user_id'));
    
         $query = $this->db->get();
-        //echo $this->db->last_query();
+    
         if ($query->num_rows() > 0) {
             return $query->num_rows();
         }
@@ -469,7 +533,7 @@ class reports extends CI_Model {
        
         
         $query = $this->db->get();
-        //echo $this->db->last_query();
+    
         if ($query->num_rows() > 0) {
             return $query->num_rows();
         }
@@ -1209,7 +1273,7 @@ $this->db->select("sum(a.total_amount) as amount,count(a.invoice_id) as toal_inv
         $this->db->where('purchase_date >=',$date1);
         $this->db->where('purchase_date <=', $date2);
         $query = $this->db->get();
-        echo $this->db->last_query();
+     
      //   return $query->totalpurchase;
       //  if(!empty($query->row()->totalpurchase)){
          //   return $query->row()->totalpurchase;
