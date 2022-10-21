@@ -565,7 +565,7 @@ array_push($result,$series1);
         $this->db->join('customer_information b', 'b.customer_id = a.customer_id');
         $this->db->where('a.sales_by',$this->session->userdata('user_id'));
         $this->db->where('a.date', $today);
-        $this->db->limit($per_page, $page);
+      
         $this->db->order_by('a.invoice_id', 'desc');
         $query = $this->db->get();
         if ($query->num_rows() > 0) {
