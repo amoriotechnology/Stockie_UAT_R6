@@ -208,6 +208,10 @@
 
                                     <th><?php echo display('invoice_no') ?></th>
 
+                                    <th>Inventory</th>
+
+                                    <th>Origin</th>
+
                                     <th><?php echo display('sale_by') ?></th>
 
                                     <th><?php echo display('customer_name') ?></th>

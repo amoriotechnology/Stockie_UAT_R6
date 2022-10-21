@@ -78,6 +78,7 @@
 
 <script src="<?php echo base_url()?>my-assets/js/admin_js/purchase.js" type="text/javascript"></script>
 <script src="https://cdn.ckeditor.com/4.17.1/standard/ckeditor.js"></script>
+<script src="<?php echo base_url() ?>my-assets/js/countrypicker.js" type="text/javascript"></script>
 
 
 
@@ -194,6 +195,7 @@
                                 </div>
                             </div>
 
+
                           <div class="col-sm-6">
                                 <div class="form-group row">
                                     <label for="date" class="col-sm-4 col-form-label">Payment due date
@@ -202,6 +204,17 @@
                                     <div class="col-sm-8">
                                         <?php $date = date('Y-m-d'); ?>
                                         <input type="text" required tabindex="2" class="form-control datepicker" name="payment_due_date" value="<?php echo $date; ?>" id="date1"  />
+                                    </div>
+                                </div>
+                            </div>
+
+                             <div class="col-sm-6">
+                                <div class="form-group row">
+                                    <label for="date" class="col-sm-4 col-form-label">Origin
+                                       <!--  <i class="text-danger">*</i> -->
+                                    </label>
+                                    <div class="col-sm-6">
+                                        <select class="selectpicker countrypicker form-control" data-live-search="true" data-default="Select the Country"  name="origin" id="origin"></select>
                                     </div>
                                 </div>
                             </div>

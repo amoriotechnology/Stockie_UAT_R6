@@ -599,6 +599,8 @@ $(document).ready(function() {
           'columns': [
              { data: 'sl' },
              { data: 'invoice' },
+             { data: 'stock' },
+             { data: 'origin' },
              { data: 'salesman' },
              { data: 'customer_name'},
              { data: 'final_date' },

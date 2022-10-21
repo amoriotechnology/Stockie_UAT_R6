@@ -190,19 +190,19 @@ public function getcustomer_data($value){
      return $query;
 
 }
-public function availability($product_nam,$product_model){
- 
-    $this->db->select('p_quantity,price');
-       $this->db->from('product_information');
-     
-       $this->db->where('product_name', $product_nam);
-       $this->db->where('product_model', $product_model);
-   // echo "select 'p_quantity,price' from 'product_information' where product_name='".$product_nam."' and 'product_model'='".$product_model."'";
-  //die();
-    $query = $this->db->get()->result();
+    public function availability($product_nam,$product_model){
     
-    return $query;
-}
+        $this->db->select('p_quantity,price');
+        $this->db->from('product_information');
+        
+        $this->db->where('product_name', $product_nam);
+        $this->db->where('product_model', $product_model);
+    // echo "select 'p_quantity,price' from 'product_information' where product_name='".$product_nam."' and 'product_model'='".$product_model."'";
+    //die();
+        $query = $this->db->get()->result();
+        
+        return $query;
+    }
 
 
      public function getInvoiceList($postData=null){
@@ -293,7 +293,7 @@ public function availability($product_nam,$product_model){
 
          ## Total number of record with filtering
 
-         $this->db->select('count(*) as allcount');
+         $this->db->select('count(*) as allcount,a.origin');
 
          $this->db->from('invoice a');
 
@@ -327,9 +327,13 @@ public function availability($product_nam,$product_model){
 
          ## Fetch records
 
-         $this->db->select("a.*,b.customer_name,u.first_name,u.last_name");
+         $this->db->select("a.*,b.customer_name,u.first_name,u.last_name,c.p_quantity");
 
          $this->db->from('invoice a');
+
+         $this->db->from('invoice_details i');
+
+         $this->db->join('product_information c', 'i.product_id = c.product_name','left');
 
          $this->db->join('customer_information b', 'b.customer_id = a.customer_id','left');
 
@@ -403,13 +407,16 @@ public function availability($product_nam,$product_model){
 
           $details ='  <a href="'.$base_url.'Cinvoice/invoice_inserted_data/'.$record->invoice_id.'" class="" >'.$record->invoice.'</a>';
 
-               
 
             $data[] = array( 
 
                 'sl'               =>$sl,
 
                 'invoice'          =>$details,
+
+                'stock'            =>$record->p_quantity,
+
+                'origin'           =>$record->origin,
 
                 'salesman'         =>$record->first_name.' '.$record->last_name,
 
@@ -420,8 +427,6 @@ public function availability($product_nam,$product_model){
                 'total_amount'     =>$record->total_amount,
 
                 'button'           =>$button,
-
-                
 
             ); 
 
@@ -1912,7 +1917,7 @@ public function availability($product_nam,$product_model){
 
             'port_of_discharge' => $this->input->post('port_of_discharge',TRUE),
 
-            'total_amount'    => $this->input->post('grand_total_price',TRUE),
+            'total_amount'    => $this->input->post('total_amount',TRUE),
 
             'total_tax'       => $this->input->post('total_tax',TRUE),
 
@@ -1931,6 +1936,8 @@ public function availability($product_nam,$product_model){
             'prevous_due'     => $this->input->post('previous',TRUE),
 
             'shipping_cost'   => $this->input->post('shipping_cost',TRUE),
+
+            'origin'   => $this->input->post('origin',TRUE),
 
             'sales_by'        => $this->session->userdata('user_id'),
 
@@ -2192,7 +2199,7 @@ echo $this->db->last_query();
 
         $rate                = $this->input->post('product_rate',TRUE);
 
-        $p_id                = $this->input->post('product_id',TRUE);
+        $p_id                = $this->input->post('prodt',TRUE);
 
         $total_amount        = $this->input->post('total_price',TRUE);
 
@@ -2214,7 +2221,9 @@ echo $this->db->last_query();
 
             $product_rate = $rate[$i];
 
-            $product_id = $p_id[$i];
+            $product_id = explode('-',$p_id);
+
+            $product_id = $product_id[0];
 
             $serial_no  = (!empty($serial_n[$i])?$serial_n[$i]:null);
 
