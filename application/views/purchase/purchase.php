@@ -95,7 +95,8 @@
 									<tr>
 										<th><?php echo display('sl') ?></th>
 										<th><?php echo display('invoice_no') ?></th>
-									
+										<th>Inventory</th>
+									  <th>Origin</th>
 										<th><?php echo display('purchase_id') ?></th>
 										<th><?php echo display('supplier_name') ?></th>
 										<th><?php echo display('purchase_date') ?></th>

@@ -318,6 +318,8 @@ var purchasedatatable = $('#PurList').DataTable({
       'columns': [
          { data: 'sl' },
          { data: 'chalan_no'},
+         { data: 'stock'},
+         { data: 'origin'},
          { data: 'purchase_id'},
          { data: 'supplier_name'},
          { data: 'purchase_date' },

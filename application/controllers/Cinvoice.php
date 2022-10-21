@@ -1051,6 +1051,8 @@ print_r($data);
 
         $data = $this->Invoices->getInvoiceList($postData);
 
+        // print_r($data); exit();
+
         echo json_encode($data);
 
     } 

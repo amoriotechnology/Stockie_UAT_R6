@@ -124,7 +124,7 @@ class Purchases extends CI_Model {
          $totalRecords = $records[0]->allcount;
 
          ## Total number of record with filtering
-         $this->db->select('count(*) as allcount');
+         $this->db->select('count(*) as allcount,a.origin');
         $this->db->from('product_purchase a');
         $this->db->join('supplier_information b', 'b.supplier_id = a.supplier_id','left');
         $this->db->where('a.create_by',$this->session->userdata('user_id'));
@@ -138,8 +138,10 @@ class Purchases extends CI_Model {
          $totalRecordwithFilter = $records[0]->allcount;
 
          ## Fetch records
-        $this->db->select('a.*,b.supplier_name');
+        $this->db->select('a.*,b.supplier_name,c.p_quantity');
         $this->db->from('product_purchase a');
+        $this->db->from('product_purchase_details p');
+         $this->db->join('product_information c', 'p.product_id = c.product_id','left');
         $this->db->join('supplier_information b', 'b.supplier_id = a.supplier_id','left');
         $this->db->where('a.create_by',$this->session->userdata('user_id'));
           if(!empty($fromdate) && !empty($todate)){
@@ -170,8 +172,10 @@ class Purchases extends CI_Model {
             $data[] = array( 
                 'sl'               =>$sl,
                 'chalan_no'        =>$record->chalan_no,
-                 'etd'        =>$record->etd,
-                  'eta'        =>$record->eta,
+                'stock'            =>$record->p_quantity,
+                'origin'           =>$record->origin,
+                'etd'              =>$record->etd,
+                'eta'              =>$record->eta,
                 'purchase_id'      =>$purchase_ids,
                 'supplier_name'    =>$record->supplier_name,
                 'purchase_date'    =>$this->occational->dateConvert($record->purchase_date),
@@ -179,6 +183,7 @@ class Purchases extends CI_Model {
                 'button'           =>$button,
                 
             ); 
+            
             $sl++;
          }
 
@@ -822,6 +827,7 @@ class Purchases extends CI_Model {
             'purchase_date'      => $this->input->post('bill_date',TRUE),
             'purchase_details'   => $this->input->post('purchase_details',TRUE),
             'payment_due_date'   => $this->input->post('payment_due_date',TRUE),
+            'origin'   => $this->input->post('origin',TRUE),
             'remarks'            => $this->input->post('remarks',TRUE),
             'message_invoice'    => $this->input->post('message_invoice',TRUE),
           
